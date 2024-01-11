@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { getNews } from '../../api/apiNews.js'
+import { getCategories, getNews } from '../../api/apiNews.js'
+import Categories from '../../components/Categories/Categories.jsx'
 import { NewsBanner } from '../../components/NewsBanner/NewsBanner.jsx'
 import { NewsList } from '../../components/NewsList/NewsList.jsx'
 import Pagination from '../../components/Pagination/Pagination.jsx'
@@ -8,6 +9,8 @@ import style from './Main.module.css'
 
 export const Main = () => {
 	const [news, setNews] = useState([])
+	const [categories, setCategories] = useState([])
+	const [selectedCategory, setSelectedCategory] = useState('All')
 	const [isLoading, setIsloading] = useState(true)
 	const [currentPage, setCurrentPage] = useState(1)
 
@@ -17,7 +20,11 @@ export const Main = () => {
 	const fetchNews = async currentPage => {
 		try {
 			setIsloading(true)
-			const response = await getNews(currentPage, pageSize)
+			const response = await getNews({
+				page_number: currentPage,
+				page_size: pageSize,
+				category: selectedCategory === 'All' ? null : selectedCategory,
+			})
 			setNews(response.news)
 			setIsloading(false)
 		} catch (error) {
@@ -25,9 +32,22 @@ export const Main = () => {
 		}
 	}
 
+	const fetchCategories = async () => {
+		try {
+			const response = await getCategories()
+			setCategories(['All', ...response.categories])
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	useEffect(() => {
+		fetchCategories()
+	}, [])
+
 	useEffect(() => {
 		fetchNews(currentPage)
-	}, [currentPage])
+	}, [currentPage, selectedCategory])
 
 	const handleNextPage = () => {
 		if (currentPage < totalPage) {
@@ -47,6 +67,12 @@ export const Main = () => {
 
 	return (
 		<main className={style.main}>
+			<Categories
+				categories={categories}
+				selectedCategory={selectedCategory}
+				setSelectedCategory={setSelectedCategory}
+			/>
+
 			{news.length > 0 && !isLoading ? (
 				<NewsBanner item={news[0]} />
 			) : (
