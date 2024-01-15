@@ -14,6 +14,4 @@ const NewsBanner = ({ item }) => {
 		</div>
 	)
 }
-
-const NewsBannerWithSkeleton = withSkeleton(NewsBanner, 'banner', 1)
-export default NewsBannerWithSkeleton
+export default NewsBanner
