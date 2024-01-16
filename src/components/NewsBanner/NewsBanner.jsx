@@ -1,7 +1,6 @@
 import style from './NewsBanner.module.css'
 import { formatTimeAgo } from '../../helpers/formatTimeAgo.js'
 import { Image } from '../Image/Image.jsx'
-import withSkeleton from '../../helpers/hoc/withSkeleton.jsx'
 
 const NewsBanner = ({ item }) => {
 	return (

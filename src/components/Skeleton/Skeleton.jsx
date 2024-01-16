@@ -11,20 +11,14 @@ const Skeleton = ({ count = 1, type = 'banner', direction = 'column' }) => {
 							: style.rowList
 					}
 				>
-					{[
-						...Array(count).map((_, index) => {
-							return (
-								<li
-									key={index}
-									className={
-										type === 'banner'
-											? style.banner
-											: style.item
-									}
-								></li>
-							)
-						}),
-					]}
+					{[...Array(count)].map((_, index) => (
+						<li
+							key={index}
+							className={
+								type === 'banner' ? style.banner : style.item
+							}
+						></li>
+					))}
 				</ul>
 			) : (
 				<li
