@@ -1,10 +1,28 @@
 import styles from './NewsByFilters.module.css'
-import Pagination from '../Pagination/Pagination.jsx'
 import { TOTAL_PAGES } from '../../constants/constants.js'
+import { PAGE_SIZE } from '../../constants/constants.js'
 import NewsList from '../NewsList/NewsList.jsx'
 import NewsFilters from '../NewsFilters/NewsFilters.jsx'
+import { useFilters } from '../../helpers/hooks/useFilters.js'
+import { useDebounce } from '../../helpers/hooks/useDebounce.js'
+import { useFetch } from '../../helpers/hooks/useFetch.js'
+import { getNews } from '../../api/apiNews.js'
+import PaginationWrapper from '../PaginationWrapper/PaginationWrapper.jsx'
 
-const NewsByFilters = ({ filters, changeFilters, news, isLoading }) => {
+const NewsByFilters = () => {
+	const { filters, changeFilters } = useFilters({
+		page_number: 1,
+		page_size: PAGE_SIZE,
+		category: null,
+		keywords: '',
+	})
+
+	const debouncedKeywords = useDebounce(filters.keywords, 1500)
+	const { data, isLoading } = useFetch(getNews, {
+		...filters,
+		keywords: debouncedKeywords,
+	})
+
 	const handleNextPage = () => {
 		if (filters.page_number < TOTAL_PAGES) {
 			changeFilters('page_number', filters.page_number + 1)
@@ -25,23 +43,17 @@ const NewsByFilters = ({ filters, changeFilters, news, isLoading }) => {
 		<section className={styles.section}>
 			<NewsFilters filters={filters} changeFilters={changeFilters} />
 
-			<Pagination
+			<PaginationWrapper
+				top={true}
+				bottom={true}
 				handleNextPage={handleNextPage}
 				handlePrevPage={handlePrevPage}
 				handlePageClick={handlePage}
 				currentPage={filters.page_number}
 				totalPages={TOTAL_PAGES}
-			/>
-
-			<NewsList isLoading={isLoading} news={news} />
-
-			<Pagination
-				handleNextPage={handleNextPage}
-				handlePrevPage={handlePrevPage}
-				handlePageClick={handlePage}
-				currentPage={filters.page_number}
-				totalPages={TOTAL_PAGES}
-			/>
+			>
+				<NewsList isLoading={isLoading} news={data?.news} />
+			</PaginationWrapper>
 		</section>
 	)
 }
