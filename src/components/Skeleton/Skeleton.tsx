@@ -1,6 +1,18 @@
 import style from './Skeleton.module.css'
+import { SkeletonType } from '../../interfaces'
+import { DirectionType } from '../../interfaces'
 
-const Skeleton = ({ count = 1, type = 'banner', direction = 'column' }) => {
+interface IProps {
+	type?: SkeletonType
+	count?: number
+	direction?: DirectionType
+}
+
+const Skeleton = ({
+	count = 1,
+	type = 'banner',
+	direction = 'column',
+}: IProps) => {
 	return (
 		<>
 			{count > 1 ? (
