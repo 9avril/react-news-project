@@ -1,4 +1,5 @@
 import style from './Search.module.css'
+import { useTheme } from '../../context/ThemeContext.tsx'
 
 interface IProps {
 	keywords: string
@@ -6,8 +7,9 @@ interface IProps {
 }
 
 const Search = ({ keywords, setKeywords }: IProps) => {
+	const { isDark } = useTheme()
 	return (
-		<div className={style.search}>
+		<div className={`${style.search} ${isDark ? style.dark : style.light}`}>
 			<input
 				type={'text'}
 				value={keywords}

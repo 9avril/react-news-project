@@ -2,7 +2,13 @@ import { useRef } from 'react'
 import React from 'react'
 import style from './Slider.module.css'
 
-const Slider = ({ children, step = 200 }) => {
+interface IProps {
+	children: React.ReactElement
+	step?: number
+	isDark: boolean
+}
+
+const Slider = ({ children, step = 200, isDark }: IProps) => {
 	const sliderRef = useRef(null)
 
 	const scrollLeft = () => {
@@ -16,7 +22,7 @@ const Slider = ({ children, step = 200 }) => {
 	}
 
 	return (
-		<div className={style.slider}>
+		<div className={`${style.slider} ${isDark ? style.dark : style.light}`}>
 			<button onClick={scrollLeft} className={style.arrow}>{`<`}</button>
 			{React.cloneElement(children, { ref: sliderRef })}
 			<button onClick={scrollRight} className={style.arrow}>{`>`}</button>

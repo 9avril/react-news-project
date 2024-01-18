@@ -11,7 +11,11 @@ import PaginationWrapper from '../PaginationWrapper/PaginationWrapper.tsx'
 import { NewsApiResponse } from '../../interfaces'
 import { ParamsType } from '../../interfaces'
 
-const NewsByFilters = () => {
+interface IProps {
+	isDark: boolean
+}
+
+const NewsByFilters = ({ isDark }: IProps) => {
 	const { filters, changeFilters } = useFilters({
 		page_number: 1,
 		page_size: PAGE_SIZE,
@@ -53,6 +57,7 @@ const NewsByFilters = () => {
 				handlePageClick={handlePage}
 				currentPage={filters.page_number}
 				totalPages={TOTAL_PAGES}
+				isDark={isDark}
 			>
 				<NewsList isLoading={isLoading} news={data?.news} />
 			</PaginationWrapper>

@@ -6,7 +6,8 @@ import { getCategories } from '../../api/apiNews.ts'
 import Slider from '../Slider/Slider.tsx'
 import { IFilters } from '../../interfaces'
 import { CategoriesApiResponse } from '../../interfaces'
-
+import { useTheme } from '../../context/ThemeContext.tsx'
+import style from './NewsFilters.module.css'
 interface IProps {
 	filters: IFilters
 	changeFilters: (key: string, value: string | number | null) => void
@@ -16,10 +17,11 @@ const NewsFilters = ({ filters, changeFilters }: IProps) => {
 	const { data: dataCategories } = useFetch<CategoriesApiResponse, null>(
 		getCategories,
 	)
+	const { isDark } = useTheme()
 	return (
-		<div className={styles.filters}>
+		<div className={`${style.filters}`}>
 			{dataCategories ? (
-				<Slider step={200}>
+				<Slider isDark={isDark} step={200}>
 					<Categories
 						categories={dataCategories.categories}
 						selectedCategory={filters.category}

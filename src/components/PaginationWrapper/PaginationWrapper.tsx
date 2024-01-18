@@ -6,19 +6,21 @@ interface IProps extends IPaginationProps {
 	children: ReactNode
 	top?: boolean
 	bottom?: boolean
+	isDark: boolean
 }
 
 const PaginationWrapper = ({
 	top,
 	bottom,
 	children,
+	isDark,
 	...paginationProps
 }: IProps) => {
 	return (
 		<>
-			{top && <Pagination {...paginationProps} />}
+			{top && <Pagination isDark={isDark} {...paginationProps} />}
 			{children}
-			{bottom && <Pagination {...paginationProps} />}
+			{bottom && <Pagination isDark={isDark} {...paginationProps} />}
 		</>
 	)
 }
