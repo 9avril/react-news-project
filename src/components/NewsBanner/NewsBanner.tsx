@@ -1,8 +1,12 @@
 import style from './NewsBanner.module.css'
-import { formatTimeAgo } from '../../helpers/formatTimeAgo.js'
-import { Image } from '../Image/Image.jsx'
+import { formatTimeAgo } from '../../helpers/formatTimeAgo.ts'
+import { Image } from '../Image/Image.tsx'
+import { INews } from '../../interfaces'
 
-const NewsBanner = ({ item }) => {
+interface IProps {
+	item: INews
+}
+const NewsBanner = ({ item }: IProps) => {
 	return (
 		<div className={style.banner}>
 			<Image image={item?.image} />
