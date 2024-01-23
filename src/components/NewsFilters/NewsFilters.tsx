@@ -1,32 +1,36 @@
-import styles from './NewsFilters.module.css'
+import { useTheme } from '../../context/ThemeContext.tsx'
+import { IFilters } from '../../interfaces'
+import { useAppDispatch } from '../../store/index.ts'
+import { useGetCategoriesQuery } from '../../store/sevices/newsApi.ts'
+import { setFilters } from '../../store/slice/newsSlice.ts'
 import Categories from '../Categories/Categories.tsx'
 import Search from '../Search/Search.tsx'
-import { useFetch } from '../../helpers/hooks/useFetch.ts'
-import { getCategories } from '../../api/apiNews.ts'
 import Slider from '../Slider/Slider.tsx'
-import { IFilters } from '../../interfaces'
-import { CategoriesApiResponse } from '../../interfaces'
-import { useTheme } from '../../context/ThemeContext.tsx'
 import style from './NewsFilters.module.css'
+
 interface IProps {
 	filters: IFilters
-	changeFilters: (key: string, value: string | number | null) => void
 }
 
-const NewsFilters = ({ filters, changeFilters }: IProps) => {
-	const { data: dataCategories } = useFetch<CategoriesApiResponse, null>(
-		getCategories,
-	)
+const NewsFilters = ({ filters }: IProps) => {
+	const { data } = useGetCategoriesQuery(null)
 	const { isDark } = useTheme()
+	const dispatch = useAppDispatch()
+
 	return (
 		<div className={`${style.filters}`}>
-			{dataCategories ? (
+			{data ? (
 				<Slider isDark={isDark} step={200}>
 					<Categories
-						categories={dataCategories.categories}
+						categories={data.categories}
 						selectedCategory={filters.category}
 						setSelectedCategory={category =>
-							changeFilters('category', category)
+							dispatch(
+								setFilters({
+									key: 'category',
+									value: category,
+								}),
+							)
 						}
 					/>
 				</Slider>
@@ -34,7 +38,14 @@ const NewsFilters = ({ filters, changeFilters }: IProps) => {
 
 			<Search
 				keywords={filters.keywords}
-				setKeywords={keywords => changeFilters('keywords', keywords)}
+				setKeywords={keywords =>
+					dispatch(
+						setFilters({
+							key: 'keywords',
+							value: keywords,
+						}),
+					)
+				}
 			/>
 		</div>
 	)
