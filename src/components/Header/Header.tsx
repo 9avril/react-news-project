@@ -19,6 +19,7 @@ export const Header = () => {
 				alt='imgTheme'
 				width={30}
 				onClick={toggleTheme}
+				className={styles.img}
 			/>
 		</header>
 	)
